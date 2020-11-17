@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Popup with postMessage</title>
+</head>
+<body>
+  <script src="./sandbox.js"></script>
+  <script>
+    if (location.hash === '#popup') {
+      // Send a postMessage
+      log('Sending postMessage to opener window');
+      opener.postMessage('Hello, from the popup!');
+
+      const buttonEl = document.createElement('button');
+      buttonEl.innerText = 'Close Popup';
+      document.body.appendChild(buttonEl);
+      buttonEl.addEventListener('click', (e) => {
+        close();
+      });
+    } else {
+      log('Listening for postMessage from popup');
+      addEventListener('message', (e) => {
+        log('Received postMessage: ', e.data);
+      });
+
+      const buttonEl = document.createElement('button');
+      buttonEl.innerText = 'Open Popup';
+      document.body.appendChild(buttonEl);
+      buttonEl.addEventListener('click', (e) => {
+        open('#popup', 'popup');
+      });
+    }
+  </script>
+</body>
+</html>
